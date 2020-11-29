@@ -54,7 +54,7 @@ describe('queries', () => {
       const matches = await postByContentLength(1000, 100)
       expect(matches).toHaveLength(1)
     })
-  })
+  })  
   describe('fullPostById', () => {
     test('finds post by id and populates everything', async () => {
       const author = await Author.create({
