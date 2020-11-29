@@ -13,25 +13,35 @@ const fullPostById = (id) => {
 }
 
 const allPostsSlim = (fieldsToSelect) => {
+  // return Post.find({}, { select: fieldsToSelect }).exec()
   return Post.find({}).select(fieldsToSelect).exec()
 }
 
 const postByContentLength = (maxContentLength, minContentLength) => {
-  return Post.find({ $and: 
-    [
-      {contentLength: { $gt: minContentLength }},
-      {contentLength: { $lt: maxContentLength }}
-    ]
+  // return Post.find({ $and: 
+  //   [
+  //     {contentLength: { $gt: minContentLength }},
+  //     {contentLength: { $lt: maxContentLength }}
+  //   ]
+  // }).exec()
+  return Post.find({
+    contentLength: {
+      $gt: minContentLength,
+      $lt: maxContentLength
+    }
   }).exec()
 }
 
-const addSimilarPosts = async (postId, similarPosts) => {
-  let postToUpdate = await Post.findById(postId).exec()
-  let oldSimilarPosts = postToUpdate.similarPosts
-  const updatedSimilarPosts = [...oldSimilarPosts, ...similarPosts]
-  return Post.findByIdAndUpdate(postId,
-    { similarPosts: updatedSimilarPosts },
-    { new: true })
+const addSimilarPosts = /*async*/(postId, similarPosts) => {
+  // let postToUpdate = await Post.findById(postId).exec()
+  // let oldSimilarPosts = postToUpdate.similarPosts
+  // const updatedSimilarPosts = [...oldSimilarPosts, ...similarPosts]
+  // return Post.findByIdAndUpdate(postId,
+  //   { similarPosts: updatedSimilarPosts },
+  //   { new: true })
+  return Post.findByIdAndUpdate(postId, {
+    $push: { similarPosts: { $each: similarPosts } }
+  }, { new: true }).exec()
 }
 
 module.exports = {
